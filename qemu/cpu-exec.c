@@ -151,6 +151,10 @@ int cpu_exec(struct uc_struct *uc, CPUArchState *env)   // qq
                             uc->invalid_error = UC_ERR_EXCEPTION;
                     }
 
+                    if (uc->stop_request) {
+                        break;
+                    }
+
                     // Unicorn: If un-catched interrupt, stop executions.
                     if (!catched) {
                         cpu->halted = 1;
@@ -212,6 +216,10 @@ int cpu_exec(struct uc_struct *uc, CPUArchState *env)   // qq
                         /* ensure that no TB jump will be modified as
                            the program flow was changed */
                         next_tb = 0;
+                    }
+
+                    if (uc->stop_request) {
+                        break;
                     }
                 }
 
@@ -298,7 +306,7 @@ int cpu_exec(struct uc_struct *uc, CPUArchState *env)   // qq
     // Unicorn: flush JIT cache to because emulation might stop in
     // the middle of translation, thus generate incomplete code.
     // TODO: optimize this for better performance
-    tb_flush(env);
+    // tb_flush(env);
 
     /* fail safe : never use current_cpu outside cpu_exec() */
     // uc->current_cpu = NULL;

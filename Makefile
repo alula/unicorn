@@ -142,7 +142,7 @@ MACOS_UNIVERSAL ?= no
 ifeq ($(UNICORN_DEBUG),yes)
 CFLAGS += -g
 else
-CFLAGS += -O3
+CFLAGS += -O3 -flto
 UNICORN_QEMU_FLAGS += --disable-debug-info
 endif
 
@@ -159,10 +159,10 @@ AR ?= ar
 RANLIB ?= ranlib
 STRIP ?= strip
 else
-CC = $(CROSS)-gcc
-AR = $(CROSS)-ar
-RANLIB = $(CROSS)-ranlib
-STRIP = $(CROSS)-strip
+CC ?= $(CROSS)-gcc
+AR ?= $(CROSS)-ar
+RANLIB ?= $(CROSS)-ranlib
+STRIP ?= $(CROSS)-strip
 endif
 
 ifeq ($(PKG_EXTRA),)
